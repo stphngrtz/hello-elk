@@ -1,0 +1,24 @@
+elasticsearch:
+  image: elasticsearch:2.1.1
+  name: elasticsearch
+  ports:
+    - "9200:9200"
+    - "9300:9300"
+logstash:
+  image: logstash:2.1.1
+  name: logstash
+  ports:
+    - "5000:5000"
+  volumes:
+    - ./logstash/conf.d:/etc/logstash/conf.d:ro
+    - ./logstash/logs:/var/log
+  links:
+    - elasticsearch
+  command: logstash -f /etc/logstash/conf.d
+kibana:
+  image: kibana:4.3.1
+  name: kibana
+  ports:
+    - "5601:5601"
+  links:
+    - elasticsearch
